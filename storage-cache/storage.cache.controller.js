@@ -19,6 +19,8 @@ class StorageCacheController {
     _buildCacheKey({action, params = {}, query = {}}) {
         const queryStr = _.sortBy(Object.keys(query), key => key).map(key => `${key}=${query[key]}`).join('&');
         const paramsStr = _.sortBy(Object.keys(params), key => key).map(key => `${key}=${params[key]}`).join('&');
+
+        // maybe better way is create a hash from this string
         return `${action}::params-${paramsStr}::query-${queryStr}`
     }
 
