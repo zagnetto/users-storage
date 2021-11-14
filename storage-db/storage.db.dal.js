@@ -27,9 +27,8 @@ class StorageDbDal {
     }
 
 
-    //???
-    async getTotals(payload, res) {
-
+    async getDistinct(key) {
+        return mongoClient.distinct(key)
     }
 
 }

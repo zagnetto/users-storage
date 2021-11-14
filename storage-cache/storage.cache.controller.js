@@ -6,14 +6,14 @@ class StorageCacheController {
 
     async getCache(req, res) {
         const cacheKey = this._buildCacheKey(req);
-        res.json(dal.getCache(cacheKey));
+        return dal.getCache(cacheKey);
     }
 
     async putCache(req, res) {
         const cacheKey = this._buildCacheKey(req);
         dal.putCache(cacheKey, req.payload);
         dal.planExpireTask(cacheKey, config.cacheTtl);
-        res.json({ok: true});
+        return {ok: true};
     }
 
     _buildCacheKey({action, params = {}, query = {}}) {

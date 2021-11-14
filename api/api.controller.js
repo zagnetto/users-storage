@@ -2,7 +2,7 @@ const config = require('../config');
 
 class ApiController {
 
-    async handle(req, res, next) {
+    async handle(req, res) {
         try {
             let cacheExists = true;
             const action = this._getActionNameFromReq(req);
@@ -17,8 +17,6 @@ class ApiController {
 
 
             res.status(result.status).json(result.response);
-
-            await next();
 
             if (!cacheExists && result.response && result.status === 200) {
                 await this._putCache({mq, params, query, action}, result.response)

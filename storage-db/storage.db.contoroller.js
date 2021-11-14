@@ -4,31 +4,27 @@ const dal = require('./storage.db.dal');
 class StorageController {
 
     async searchUsers(req, res) {
-        try {
-            const searchOptions = _.pick(req.query, 'page', 'limit', 'country', 'city');
-            const [data, count] = await Promise.all([
-                dal.searchUsers(searchOptions),
-                dal.countUsers(searchOptions)
-            ]);
-            res.json({count, data});
-        } catch (error) {
-            res.status(400).json({error: error.toString()});
-        }
+        const searchOptions = _.pick(req.query, 'page', 'limit', 'country', 'city');
+        const [data, count] = await Promise.all([
+            dal.searchUsers(searchOptions),
+            dal.countUsers(searchOptions)
+        ]);
+        return {count, data};
     }
 
     async getUserById(req, res) {
-        try {
-            if (!_.get(req, 'params.id')) return res.status(400).json({error: `User id is not specified`});
-            const user = await dal.getUserPublicInfoById(req.params.id);
-            res.json(user || {});
-        } catch (error) {
-            res.status(400).json({error: error.toString()});
-        }
+        if (!_.get(req, 'params.id')) throw Error(`User id is not specified`);
+        const user = await dal.getUserPublicInfoById(req.params.id);
+        return user || {};
     }
 
-    //???
-    async getTotals(payload, res) {
-
+    async getTotals(req, res) {
+        const [country, city, usersCount] = await Promise.all([
+            dal.getDistinct('country').then(items => items.length),
+            dal.getDistinct('city').then(items => items.length),
+            dal.countUsers()
+        ])
+        return {country, city, usersCount};
     }
 
 }

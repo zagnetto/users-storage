@@ -24,6 +24,10 @@ class MongodbClient {
         return this.collection.findOne(ObjectId(id), options);
     }
 
+    async distinct(key, searchQuery = {}) {
+        return this.collection.distinct(key, searchQuery);
+    }
+
     async init() {
         if (this.initialized) return console.warn(`Client already initialized!`);
 
