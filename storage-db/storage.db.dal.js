@@ -27,8 +27,22 @@ class StorageDbDal {
     }
 
 
-    async getDistinct(key) {
-        return mongoClient.distinct(key)
+    async getTotals() {
+        const aggregationQuery = [
+            {
+                $group: {
+                    "_id": {
+                        city: "$city",
+                        country: "$country"
+                    },
+                    usersCount: {"$sum": 1}
+                }
+            }
+        ]
+        return mongoClient.aggregate(aggregationQuery)
+            .then(res => res.toArray())
+            .then(res => res.map(({_id: {country, city}, usersCount}) => ({country, city, usersCount})))
+            ;
     }
 
 }

@@ -24,8 +24,8 @@ class MongodbClient {
         return this.collection.findOne(ObjectId(id), options);
     }
 
-    async distinct(key, searchQuery = {}) {
-        return this.collection.distinct(key, searchQuery);
+    async aggregate(query) {
+        return this.collection.aggregate(query);
     }
 
     async init() {

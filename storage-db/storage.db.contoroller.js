@@ -19,12 +19,7 @@ class StorageController {
     }
 
     async getTotals(req, res) {
-        const [country, city, usersCount] = await Promise.all([
-            dal.getDistinct('country').then(items => items.length),
-            dal.getDistinct('city').then(items => items.length),
-            dal.countUsers()
-        ])
-        return {country, city, usersCount};
+        return dal.getTotals();
     }
 
 }
